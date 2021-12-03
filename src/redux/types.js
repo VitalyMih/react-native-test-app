@@ -1,0 +1,7 @@
+export const SET_LOADING = 'SET_LOADING'
+export const SET_AUTHORIZED = 'SET_AUTHORIZED'
+export const SET_MAIL = 'SET_MAIL'
+export const SET_PASSWORD = 'SET_PASSWORD'
+export const GET_ACCOUNT = 'GET_ACCOUNT'
+export const GET_ORDERS = 'GET_ORDERS'
+export const GET_PRODUCTS = 'GET_PRODUCTS'
