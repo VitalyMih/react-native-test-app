@@ -1,15 +1,15 @@
-import React, { useEffect } from "react";
-import { ActivityIndicator, View } from "react-native"
+import React, { useEffect } from "react"
+import { ActivityIndicator, FlatList, View } from "react-native"
 import { TabHeader } from "../../../components/TabHeader/TabHeader"
 import { useDispatch, useSelector } from "react-redux"
 import { getOrders } from "../../../redux/actions"
 import { OrdersTabStyle } from "./OrdersTabStyle"
-import { OrderList } from "../../../components/OrderList"
+import { OrderCard } from "../../../components/OrderCard/OrderCard"
 
 export const OrdersTabScreen = () => {
   const orders = useSelector(state => state.get.orders)
-  const mail = useSelector(state => state.get.mail)
-  const password = useSelector(state => state.get.password)
+  const mail = useSelector(state => state.authorization.mail)
+  const password = useSelector(state => state.authorization.password)
   const dispatch = useDispatch()
 
 
@@ -21,7 +21,13 @@ export const OrdersTabScreen = () => {
     <TabHeader text="Заказы">
       {
         orders
-          ? <View style={{flex: 1}}><OrderList orders={orders} /></View>
+          ? <View style={{flex: 1}}>
+            <FlatList
+              data={orders}
+              renderItem={({ item }) => <OrderCard order={item} />}
+              keyExtractor={(order) => order.key}
+            />
+            </View>
           : <View style={OrdersTabStyle.loader}><ActivityIndicator size='large' color='#5b39b8' /></View>
       }
     </TabHeader>

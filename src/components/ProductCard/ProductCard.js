@@ -6,7 +6,10 @@ export const ProductCard = ({ product }) => {
   return (
     <View style={ProductCardStyle.container}>
       <View style={ProductCardStyle.image_container}>
-        <Image source={{uri: product.images[0].original_url}} style={ProductCardStyle.image}/>
+        { product.images.length > 0
+          ? <Image source={{uri: product.images[0].original_url}} style={ProductCardStyle.image} />
+          : <Image source={{uri: 'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'}} style={ProductCardStyle.image} />
+        }
       </View>
       <View style={ProductCardStyle.main_content}>
         <Text style={ProductCardStyle.main_title}>{product.title}</Text>

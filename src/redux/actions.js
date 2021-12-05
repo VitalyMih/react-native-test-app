@@ -1,9 +1,18 @@
-import { GET_ACCOUNT, GET_ORDERS, GET_PRODUCTS, SET_AUTHORIZED, SET_LOADING, SET_MAIL, SET_PASSWORD } from "./types"
+import {
+  GET_ACCOUNT,
+  GET_ORDERS,
+  GET_PRODUCTS, GET_REFRESH_PRODUCTS, LOG_OUT,
+  SET_AUTHORIZED,
+  SET_LOADING,
+  SET_MAIL, SET_NULL_PRODUCTS_PAGE,
+  SET_PASSWORD,
+  SET_PRODUCT_PAGE, SET_REFRESH,
+} from "./types"
 import axios from "axios"
 import { getBase64Authorization } from "../functions/Base64Authorization"
 
 
-export function getAccount(mail, password, navigation) {
+export function getAccount(mail, password) {
   return async dispatch => {
     dispatch(setLoading(true))
     try {
@@ -18,9 +27,8 @@ export function getAccount(mail, password, navigation) {
         payload: response.data
       })
 
-      dispatch(setLoading(false))
       dispatch(setAuthorized(true))
-      navigation.navigate('TabNavigator')
+      dispatch(setLoading(false))
     } catch (error) {
       dispatch(setLoading(false))
       alert(error)
@@ -30,7 +38,6 @@ export function getAccount(mail, password, navigation) {
 
 export function getOrders(mail, password) {
   return async dispatch => {
-    dispatch(setLoading(true))
     try {
       const response = await axios.get('https://myshop-bre569.myinsales.ru/admin/orders.json', {
         headers: {
@@ -43,19 +50,16 @@ export function getOrders(mail, password) {
         payload: response.data
       })
 
-      dispatch(setLoading(false))
     } catch (error) {
-      dispatch(setLoading(false))
       alert(error)
     }
   }
 }
 
-export function getProducts(mail, password) {
+export function getProducts(mail, password, page) {
   return async dispatch => {
-    dispatch(setLoading(true))
     try {
-      const response = await axios.get('https://myshop-bre569.myinsales.ru/admin/products.json', {
+      const response = await axios.get(`https://myshop-bre569.myinsales.ru/admin/products.json?page=${page}`, {
         headers: {
           'Authorization': getBase64Authorization(mail, password)
         }
@@ -66,9 +70,31 @@ export function getProducts(mail, password) {
         payload: response.data
       })
 
-      dispatch(setLoading(false))
     } catch (error) {
-      dispatch(setLoading(false))
+      alert(error)
+    }
+  }
+}
+
+export function getRefreshProducts(mail, password) {
+  return async dispatch => {
+    dispatch(setRefresh(true))
+    try {
+      const response = await axios.get(`https://myshop-bre569.myinsales.ru/admin/products.json?page=1`, {
+        headers: {
+          'Authorization': getBase64Authorization(mail, password)
+        }
+      })
+
+      dispatch({
+        type: GET_REFRESH_PRODUCTS,
+        payload: response.data
+      })
+
+      dispatch(setNullProductsPage())
+      dispatch(setRefresh(false))
+    } catch (error) {
+      dispatch(setRefresh(false))
       alert(error)
     }
   }
@@ -99,5 +125,30 @@ export function setAuthorized(authorized) {
   return {
     type: SET_AUTHORIZED,
     payload: authorized
+  }
+}
+
+export function setProductsPage() {
+  return {
+    type: SET_PRODUCT_PAGE
+  }
+}
+
+export function setNullProductsPage() {
+  return {
+    type: SET_NULL_PRODUCTS_PAGE
+  }
+}
+
+export function setRefresh(refresh) {
+  return {
+    type: SET_REFRESH,
+    payload: refresh
+  }
+}
+
+export function logOut() {
+  return {
+    type: LOG_OUT
   }
 }

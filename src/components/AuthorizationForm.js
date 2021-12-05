@@ -1,12 +1,10 @@
 import { AuthorizationScreenStyle } from "../screens/stackNavigation/AuthorizationScreen/AuthorizationScreenStyle"
 import { ActivityIndicator, Linking, Text, TextInput, TouchableOpacity, View } from "react-native"
 import React, { useState } from "react"
-import { useNavigation } from "@react-navigation/native"
 import { useDispatch, useSelector } from "react-redux"
 import { getAccount, setMail, setPassword } from "../redux/actions"
 
 export const AuthorizationForm = () => {
-  const navigation = useNavigation()
   const dispatch = useDispatch()
   const loading = useSelector(state => state.app.loading)
   const [password, setPasswordValue] = useState('')
@@ -15,7 +13,7 @@ export const AuthorizationForm = () => {
   const onPressHandler = () => {
     dispatch(setMail(mail))
     dispatch(setPassword(password))
-    dispatch(getAccount(mail, password, navigation))
+    dispatch(getAccount(mail, password))
   }
 
   return (

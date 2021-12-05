@@ -1,22 +1,25 @@
-import { GET_ACCOUNT, GET_ORDERS, GET_PRODUCTS, SET_AUTHORIZED, SET_MAIL, SET_PASSWORD } from "./types"
+import {
+  GET_ORDERS,
+  GET_PRODUCTS, GET_REFRESH_PRODUCTS,
+  SET_NULL_PRODUCTS_PAGE,
+  SET_PRODUCT_PAGE, SET_REFRESH,
+} from "./types"
 
 const initialState = {
-  mail: null,
-  password: null,
-  account: null,
-  authorized: false,
   orders: null,
-  products: null
+  products: [],
+  productsPage: 1,
+  refresh: false
 }
 
 export const getReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_ACCOUNT: return {...state, account: action.payload}
     case GET_ORDERS: return {...state, orders: action.payload}
-    case GET_PRODUCTS: return {...state, products: action.payload}
-    case SET_AUTHORIZED: return {...state, authorized: action.payload}
-    case SET_MAIL: return {...state, mail: action.payload}
-    case SET_PASSWORD: return {...state, password: action.payload}
+    case GET_PRODUCTS: return {...state, products: [...state.products, ...action.payload]}
+    case GET_REFRESH_PRODUCTS: return {...state, products: action.payload}
+    case SET_PRODUCT_PAGE: return {...state, productsPage: state.productsPage + 1}
+    case SET_NULL_PRODUCTS_PAGE: return {...state, productsPage: 2}
+    case SET_REFRESH: return {...state, refresh: action.payload}
     default: return state
   }
 }

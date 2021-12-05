@@ -2,7 +2,7 @@ import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NavigationContainer } from "@react-navigation/native"
-import { Image, View, Text } from "react-native"
+import { View, Text } from "react-native"
 import { MainScreen } from "../screens/stackNavigation/MainScreen/MainScreen"
 import { AuthorizationScreen } from "../screens/stackNavigation/AuthorizationScreen/AuthorizationScreen"
 import { MainTabScreen } from "../screens/tabNavigation/MainTabScreen"
@@ -11,6 +11,8 @@ import { ProductsTabScreen } from "../screens/tabNavigation/ProductsTabScreen/Pr
 import { StatisticsTabScreen } from "../screens/tabNavigation/StatisticsTabScreen"
 import { MessageTabScreen } from "../screens/tabNavigation/MessageTabScreen"
 import { NavigatorStyle } from "./NavigatorStyle"
+import { useSelector } from "react-redux"
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -27,7 +29,7 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={NavigatorStyle.icon}>
-              <Image source={require('../img/icons/main_icon.png')} style={{tintColor: focused ? '#070edb' : '#494a4d', ...NavigatorStyle.icon_image}} />
+              <Icon name='home' size={25} style={{color: focused ? '#070edb' : '#494a4d'}} />
               <Text style={{color: focused ? '#070edb' : '#494a4d', ...NavigatorStyle.icon_text}}>Главная</Text>
             </View>
           )}}
@@ -38,7 +40,7 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={NavigatorStyle.icon}>
-              <Image source={require('../img/icons/orders_icon.png')} style={{tintColor: focused ? '#070edb' : '#494a4d', ...NavigatorStyle.icon_image}} />
+              <Icon name='shopping-cart' size={25} style={{color: focused ? '#070edb' : '#494a4d'}} />
               <Text style={{color: focused ? '#070edb' : '#494a4d', ...NavigatorStyle.icon_text}}>Заказы</Text>
             </View>
           )}}
@@ -49,7 +51,7 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={NavigatorStyle.icon}>
-              <Image source={require('../img/icons/products_icon.png')} style={{tintColor: focused ? '#070edb' : '#494a4d', ...NavigatorStyle.icon_image}} />
+              <Icon name="shopping-bag" size={25} style={{color: focused ? '#070edb' : '#494a4d'}} />
               <Text style={{color: focused ? '#070edb' : '#494a4d', ...NavigatorStyle.icon_text}}>Товары</Text>
             </View>
           )}}
@@ -60,7 +62,7 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={NavigatorStyle.icon}>
-              <Image source={require('../img/icons/statistics_icon.png')} style={{tintColor: focused ? '#070edb' : '#494a4d', ...NavigatorStyle.icon_image}} />
+              <Icon name="trending-up" size={25} style={{color: focused ? '#070edb' : '#494a4d'}} />
               <Text style={{color: focused ? '#070edb' : '#494a4d', ...NavigatorStyle.icon_text}}>Статистика</Text>
             </View>
           )}}
@@ -71,7 +73,7 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={NavigatorStyle.icon}>
-              <Image source={require('../img/icons/message_icon.png')} style={{tintColor: focused ? '#070edb' : '#494a4d', ...NavigatorStyle.icon_image}} />
+              <Icon name="question-answer" size={25} style={{color: focused ? '#070edb' : '#494a4d'}} />
               <Text style={{color: focused ? '#070edb' : '#494a4d', ...NavigatorStyle.icon_text}}>Сообщения</Text>
             </View>
           )}}
@@ -81,19 +83,23 @@ const TabNavigator = () => {
 }
 
 export const Navigator = () => {
+  const authorized = useSelector(state => state.authorization.authorized)
+
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-          animationEnabled: false
-        }}
-        initialRouteName="App"
-      >
-        <Stack.Screen name="Main" component={MainScreen} />
-        <Stack.Screen name="Authorization" component={AuthorizationScreen} />
-        <Stack.Screen name="TabNavigator" component={TabNavigator} />
-      </Stack.Navigator>
+      {authorized
+        ? TabNavigator()
+        : <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+              animationEnabled: false
+            }}
+            initialRouteName="App"
+          >
+            <Stack.Screen name="Main" component={MainScreen} />
+            <Stack.Screen name="Authorization" component={AuthorizationScreen} />
+          </Stack.Navigator>
+      }
     </NavigationContainer>
   )
 }
