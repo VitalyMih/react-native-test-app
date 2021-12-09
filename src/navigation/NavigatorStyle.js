@@ -8,7 +8,7 @@ export const NavigatorStyle = StyleSheet.create({
   icon_image: {
     width: 25,
     height: 25,
-    marginBottom: 10
+    marginBottom: 7
   },
   icon_text: {
     fontSize: 11
